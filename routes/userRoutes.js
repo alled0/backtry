@@ -87,6 +87,7 @@ router.put("/Your-Profile", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Failed to update profile", error: err.message });
   }
 });
+
 router.get("/Your-Profile", authenticateToken, async (req, res) => {
   try {
     const userId = req.user._id;  // Extract user ID from the token
