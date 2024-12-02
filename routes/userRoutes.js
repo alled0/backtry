@@ -9,7 +9,7 @@ const authenticateToken = require('../middleware/authenticateToken');  // Adjust
 router.post("/Sign-Up", async (req, res) => {
   try {
     // Validate the incoming user data using Joi schema
-    const { error } = validate(req.body);
+    const  error  = validate(req.body);
     if (error) return res.status(400).send({ message: error.details[0].message });
 
     // Check if user already exists
