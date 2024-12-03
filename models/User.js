@@ -10,9 +10,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: {
     type: String,
-    enum: ["Student", "Admin"],
-    required: true,
-  },
+    enum: ["normal", "admin","clubAccount"],
+    default:"normal"},
   // Profile-related fields directly in the User schema
   profilePicture: { type: String, default: "" },
   interests: { type: String, default: "" },
@@ -44,7 +43,7 @@ const validate = (data) => {
     name: Joi.string().required().label("Name"),
     email: Joi.string().email().required().label("Email"),
     password: passwordComplexity().required().label("Password"),
-    role: Joi.string().valid("Student", "Admin").required().label("Role"),
+    role: Joi.string().valid("normal", "admin","clubAccount").required().label("Role"),
   });
   return schema.validate(data);
 };

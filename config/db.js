@@ -1,6 +1,8 @@
 //db.js
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+MONGODB_URI =
+  "mongodb+srv://alledcss:Ww1234@cluster0.oc4ph.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 dotenv.config();
 const connectDB = async () => {
@@ -9,9 +11,9 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log('MongoDB connected...');
+    console.log("MongoDB connected...");
   } catch (error) {
-    console.error('Database connection error:', error.message);
+    console.error("Database connection error:", error.message);
     process.exit(1);
   }
 };
