@@ -1,5 +1,6 @@
 // Imports
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connection = require("./config/db.js");
@@ -7,6 +8,7 @@ const connection = require("./config/db.js");
 // Routes
 const authRoutes = require("./routes/authRoutes.js");
 const userRoutes = require("./routes/userRoutes.js"); // Fix typo
+const reservationRoute = require("./routes/reservationRoute.js");
 const eventRoutes = require("./routes/eventRoute.js");
 const clubRoutes = require("./routes/clubRoute.js");
 
@@ -24,6 +26,7 @@ app.use("/api/userRoutes", userRoutes);
 app.use("/api/authRoutes", authRoutes);
 app.use("/api/eventRoute", eventRoutes)
 app.use("/api/clubRoute", clubRoutes)
+app.use("/api/reservationRoute", reservationRoute);
 
 
 const PORT = process.env.PORT || 5000;
