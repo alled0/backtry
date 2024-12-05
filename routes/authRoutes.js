@@ -44,12 +44,12 @@ router.post("/Log-In", async (req, res) => {
     // Find the user by email
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      return res.status(401).send({ message: "Invalid email or password" });
+      return res.status(401).send({ message: "User not found, please sign up" });
     }
 
     // Check if the OTP is verified
     if (!user.otpVerified) {
-      return res.status(400).send({ message: "OTP not verified. Please verify your OTP." });
+      return res.status(403).send({ message: "Your account is not verified. Please verify your OTP." });
     }
 
     // Compare the password
