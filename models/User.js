@@ -1,3 +1,4 @@
+// models/User.js
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -10,18 +11,20 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: {
     type: String,
-    enum: ["normal", "admin","clubAccount"],
-    default:"normal"},
-  // Profile-related fields directly in the User schema
+    enum: ["normal", "admin", "clubAccount"],
+    default: "normal"
+  },
+  otpVerified: {
+    type: Boolean,
+    default: false,
+  },
   profilePicture: { type: String, default: "" },
   interests: { type: String, default: "" },
   contactNumber: { type: String, default: "" },
   linkedIn: { type: String, default: "" },
   ID: { type: String, default: "443" },
- 
 });
 
-// Method to generate JWT token
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
@@ -29,18 +32,16 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
-// Joi validation for user sign-up data
 const validate = (data) => {
   const schema = Joi.object({
     name: Joi.string().required().label("Name"),
     email: Joi.string().email().required().label("Email"),
     password: passwordComplexity().required().label("Password"),
-    role: Joi.string().valid("normal", "admin","clubAccount").required().label("Role"),
+    role: Joi.string().valid("normal", "admin", "clubAccount").required().label("Role"),
   });
   return schema.validate(data);
 };
 
-// Joi validation for user profile update data
 const validateProfileUpdate = (data) => {
   const schema = Joi.object({
     name: Joi.string().optional(),
@@ -49,8 +50,7 @@ const validateProfileUpdate = (data) => {
     interests: Joi.string().optional(),
     contactNumber: Joi.string().optional(),
     linkedIn: Joi.string().optional(),
-    ID:Joi.String().optional(),
-    // Add more fields if needed
+    ID: Joi.string().optional(),
   });
   return schema.validate(data);
 };
@@ -58,5 +58,3 @@ const validateProfileUpdate = (data) => {
 const User = mongoose.model("User", userSchema);
 
 module.exports = { User, validate, validateProfileUpdate };
-
-

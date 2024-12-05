@@ -11,7 +11,7 @@ const userRoutes = require("./routes/userRoutes.js"); // Fix typo
 const reservationRoute = require("./routes/reservationRoute.js");
 const eventRoutes = require("./routes/eventRoute.js");
 const clubRoutes = require("./routes/clubRoute.js");
-
+const otpRoutes = require("./routes/otpRoutes.js")
 
 dotenv.config(); // Load environment variables
 
@@ -27,10 +27,12 @@ app.use("/api/authRoutes", authRoutes);
 app.use("/api/eventRoute", eventRoutes)
 app.use("/api/clubRoute", clubRoutes)
 app.use("/api/reservationRoute", reservationRoute);
+app.use("/api/otpRoutes",otpRoutes)
 
 
 
 const PORT = process.env.PORT || 5000;
+
 
 try {
   connection()

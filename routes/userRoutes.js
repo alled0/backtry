@@ -1,55 +1,61 @@
-//routes/userRoutes.js
+// routes/userRoutes.js
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const { User, validate, validateProfileUpdate } = require("../models/User");
 const router = express.Router();
 const authenticateToken = require("../middleware/authenticateToken");
-const authorizeRoles = require("../middleware/authorizeRoles"); // Import the middleware
+const authorizeRoles = require("../middleware/authorizeRoles");
 
-// Regular expression to match the email format yxxxxxxxxx@kfupm.edu.sa
-// const emailRegex = /^[a-zA-Z]\d{9}@kfupm\.edu\.sa$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@kfupm\.edu\.sa$/;
 
-// Sign-Up route (accessible to anyone)
 router.post("/Sign-Up", async (req, res) => {
   try {
-    // Validate the incoming user data using Joi schema
+    const { name, email, password, role } = req.body;
+
+    // Validate the user data
     const { error } = validate(req.body);
     if (error) return res.status(400).send({ message: error.details[0].message });
 
-    // Check if the email matches the required format
-    if (!emailRegex.test(req.body.email)) {
+    // Check email format
+    if (!emailRegex.test(email)) {
       return res.status(400).send({
         message: "Please enter a valid email in the format Name/ID@kfupm.edu.sa.",
       });
     }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email: req.body.email });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).send({ message: "User with this email already exists" });
     }
 
-    // Hash the password before saving the user
+    
+    // Hash password and create user
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create the new user
     const user = new User({
-      name: req.body.name,
-      email: req.body.email,
+      name,
+      email,
       password: hashedPassword,
-      role: req.body.role,
+      role,
     });
 
     await user.save();
 
-    res.status(201).send({ message: "User registered successfully!" });
+    // Now, no OTP is generated here. Just inform user to request OTP separately.
+    res.status(201).send({
+      message: "User registered successfully! Please request an OTP to verify your email.",
+    });
   } catch (error) {
-    console.error("Sign-up error:", error); // Log the error for debugging
+    console.error("Sign-up error:", error);
     res.status(500).send({ message: "Server error" });
   }
 });
+
+module.exports = router;
+
+
 // Update Profile route (accessible to authenticated users)
 router.put("/Your-Profile", authenticateToken, async (req, res) => {
   const userId = req.user._id; // Extract user ID from the JWT token

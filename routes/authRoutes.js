@@ -47,6 +47,11 @@ router.post("/Log-In", async (req, res) => {
       return res.status(401).send({ message: "Invalid email or password" });
     }
 
+    // Check if the OTP is verified
+    if (!user.otpVerified) {
+      return res.status(400).send({ message: "OTP not verified. Please verify your OTP." });
+    }
+
     // Compare the password
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) {
