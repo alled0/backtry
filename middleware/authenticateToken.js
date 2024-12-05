@@ -20,9 +20,16 @@
 //   }
 // };
 
+
+
+
+
+
+
+
+
 // module.exports = authenticateToken;
 const jwt = require("jsonwebtoken");
-
 const authenticateToken = (req, res, next) => {
   const token = req.header("Authorization")?.replace("Bearer ", "");
 
@@ -39,7 +46,6 @@ const authenticateToken = (req, res, next) => {
     return res.status(400).json({ message: "Invalid or expired token" });
   }
 };
-
 module.exports = authenticateToken;
 
 

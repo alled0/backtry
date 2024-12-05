@@ -6,20 +6,28 @@ const router = express.Router();
 const authenticateToken = require("../middleware/authenticateToken");
 const authorizeRoles = require("../middleware/authorizeRoles"); // Import the middleware
 
+// Regular expression to match the email format yxxxxxxxxx@kfupm.edu.sa
+// const emailRegex = /^[a-zA-Z]\d{9}@kfupm\.edu\.sa$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@kfupm\.edu\.sa$/;
+
 // Sign-Up route (accessible to anyone)
 router.post("/Sign-Up", async (req, res) => {
   try {
     // Validate the incoming user data using Joi schema
     const { error } = validate(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
+    if (error) return res.status(400).send({ message: error.details[0].message });
+
+    // Check if the email matches the required format
+    if (!emailRegex.test(req.body.email)) {
+      return res.status(400).send({
+        message: "Please enter a valid email in the format Name/ID@kfupm.edu.sa.",
+      });
+    }
 
     // Check if user already exists
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
-      return res
-        .status(400)
-        .send({ message: "User with this email already exists" });
+      return res.status(400).send({ message: "User with this email already exists" });
     }
 
     // Hash the password before saving the user
@@ -42,7 +50,6 @@ router.post("/Sign-Up", async (req, res) => {
     res.status(500).send({ message: "Server error" });
   }
 });
-
 // Update Profile route (accessible to authenticated users)
 router.put("/Your-Profile", authenticateToken, async (req, res) => {
   const userId = req.user._id; // Extract user ID from the JWT token

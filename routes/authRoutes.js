@@ -1,10 +1,14 @@
-//routes/authRoutes.js
+// routes/authRoutes.js
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/User");
 const Joi = require("joi");
 const router = express.Router();
+
+// Regular expression to match the email format yxxxxxxxxx@kfupm.edu.sa
+// const emailRegex = /^[a-zA-Z]\d{9}@kfupm\.edu\.sa$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@kfupm\.edu\.sa$/;
 
 // Middleware to authenticate token
 const authenticateToken = (req, res, next) => {
@@ -23,6 +27,11 @@ const authenticateToken = (req, res, next) => {
 // Login route
 router.post("/Log-In", async (req, res) => {
   try {
+    // Validate email format using regex
+    if (!emailRegex.test(req.body.email)) {
+      return res.status(400).send({ message: "Please enter a valid email in the format Name/ID@kfupm.edu.sa." });
+    }
+
     // Validate login input (email and password only)
     const schema = Joi.object({
       email: Joi.string().email().required().label("Email"),
