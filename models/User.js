@@ -18,15 +18,7 @@ const userSchema = new mongoose.Schema({
   contactNumber: { type: String, default: "" },
   linkedIn: { type: String, default: "" },
   ID: { type: String, default: "443" },
-  // Add more fields as necessary
-  // profileData: {
-  //   type: Object,
-  //   default: {},
-  // },
-  // preferences: {
-  //   type: Object,
-  //   default: {},
-  // },
+ 
 });
 
 // Method to generate JWT token

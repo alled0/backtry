@@ -24,40 +24,6 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-// Sign-Up
-router.post("/Sign-Up", async (req, res) => {
-  try {
-    // Validate the incoming user data using Joi schema
-    const  error  = validate(req.body);
-    if (error) return res.status(400).send({ message: error.details[0].message });
-
-    // Check if user already exists
-    const existingUser = await User.findOne({ email: req.body.email });
-    if (existingUser) {
-      return res.status(400).send({ message: "User with this email already exists" });
-    }
-
-    // Hash the password before saving the user
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-    // Create the new user
-    const user = new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: hashedPassword,
-      role: req.body.role,
-    });
-
-    await user.save();
-
-    res.status(201).send({ message: "User registered successfully!" });
-  } catch (error) {
-    console.error("Sign-up error:", error); // Log the error for debugging
-    res.status(500).send({ message: "Server error" });
-  }
-});
-
 // Login route
 router.post("/Log-In", async (req, res) => {
   try {
