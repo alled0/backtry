@@ -77,7 +77,7 @@ router.post('/verify-otp', async (req, res) => {
 
     console.log("Current Time:", new Date().toISOString());
     console.log("OTP Expiration Time:", otpRecord.expiresAt.toISOString());
-    console.log("OTP in DB:", otpRecord.otp);
+    // console.log("OTP in DB:", otpRecord.otp);
 
     const currentTime = new Date();
     if (currentTime > otpRecord.expiresAt) {
