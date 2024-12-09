@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
+const {Mongoose, mongo} = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -23,6 +24,9 @@ const userSchema = new mongoose.Schema({
   contactNumber: { type: String, default: "" },
   linkedIn: { type: String, default: "" },
   ID: { type: String, default: "443" },
+  followedClubs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Club" }],
+  enrolledClubs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Club" }],
+  joinedEvents: [{type: mongoose.Schema.Types.ObjectId, ref: "Event"}],
 });
 
 userSchema.methods.generateAuthToken = function () {

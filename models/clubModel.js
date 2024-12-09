@@ -4,7 +4,7 @@ const clubSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true }, // Name of the club
     description: { type: String, required: true }, // Description of the club
     clubPicture: { type: String }, // Optional club logo or picture URL
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // User who created the club (usually admin)
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User'/*, required: true */}, // User who created the club (usually admin)
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Members of the club
     events: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }], // Events hosted by the club
     createdAt: { type: Date, default: Date.now }, // Date the club was created
