@@ -27,6 +27,9 @@ const userSchema = new mongoose.Schema({
   followedClubs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Club" }],
   enrolledClubs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Club" }],
   joinedEvents: [{type: mongoose.Schema.Types.ObjectId, ref: "Event"}],
+  joinedReservations: [{type: mongoose.Schema.Types.ObjectId, ref: "Reservation"}],
+  createdReservation:{ type: Boolean, default: false}
+  
 });
 
 userSchema.methods.generateAuthToken = function () {
