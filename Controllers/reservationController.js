@@ -2,13 +2,14 @@ const Reservation = require("../models/Reservation");
 const generateCode = () => Math.floor(1000 + Math.random() * 9000).toString();
 
 exports.createReservation = async (req, res) => {
-  const { user, sport, field, type, date, time } = req.body;
+  const { sport, field, type, date, time } = req.body;
+  const userId = req.user._id; // Extracted from the token
 
-  console.log("Incoming reservation data:", req.body);
+  console.log("Logged-in user ID:", userId);
 
   try {
     // Validate required fields
-    if (!user || !sport || !field || !type || !date || !time) {
+    if (!sport || !field || !type || !date || !time) {
       return res.status(400).json({
         error:
           "Missing required fields. Please ensure all fields are provided.",
@@ -34,7 +35,7 @@ exports.createReservation = async (req, res) => {
 
     // Create and save the reservation
     const newReservation = new Reservation({
-      email,
+      createdBy: userId, // Associate with logged-in user
       sport,
       field,
       code,
@@ -48,11 +49,8 @@ exports.createReservation = async (req, res) => {
     console.log("Reservation created successfully:", newReservation);
     res.status(201).json(newReservation);
   } catch (err) {
-    console.error("Error creating reservation:", err); // Log detailed error
-    res.status(500).json({
-      error:
-        err.message || "Server error creating reservation. Please try again.",
-    });
+    console.error("Error creating reservation:", err);
+    res.status(500).json({ error: "Server error creating reservation." });
   }
 };
 

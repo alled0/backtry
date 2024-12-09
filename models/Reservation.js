@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
 const reservationSchema = new mongoose.Schema({
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // The email of the owner/creator
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  }, // The email of the owner/creator
   sport: {
     type: String,
     required: true,

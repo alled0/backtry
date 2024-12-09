@@ -48,44 +48,41 @@ const profileUpdateSchema = Joi.object({
   ID: Joi.string().optional(),
 });
 
+// Reservation Validation Schema
 const reservationSchema = Joi.object({
-  email: Joi.string().pattern(emailRegex).required().messages({
-    "string.pattern.base":
-      "Email must be in the format yxxxxxxxxx@kfupm.edu.sa",
-    "string.empty": "Email is required",
-    "any.required": "Email is required",
-  }),
   sport: Joi.string().required().messages({
-    "string.empty": "Sport is required",
-    "any.required": "Sport is required",
+    "string.empty": "Sport is required.",
+    "any.required": "Sport is required.",
   }),
   field: Joi.string().required().messages({
-    "string.empty": "Field is required",
-    "any.required": "Field is required",
+    "string.empty": "Field is required.",
+    "any.required": "Field is required.",
   }),
   type: Joi.string().valid("Public", "Private").required().messages({
-    "any.only": "Type must be either 'Public' or 'Private'",
-    "string.empty": "Type is required",
-    "any.required": "Type is required",
+    "any.only": "Type must be either 'Public' or 'Private'.",
+    "string.empty": "Type is required.",
+    "any.required": "Type is required.",
   }),
-  date: Joi.date().required().messages({
-    "date.base": "Invalid date format",
-    "any.required": "Date is required",
+  date: Joi.date().iso().required().messages({
+    "date.base": "Invalid date format. Please use YYYY-MM-DD.",
+    "any.required": "Date is required.",
   }),
   time: Joi.string().required().messages({
-    "string.empty": "Time is required",
-    "any.required": "Time is required",
+    "string.empty": "Time is required.",
+    "any.required": "Time is required.",
   }),
 });
 
 // Middleware to Validate Reservation Data
 const validateReservation = (req, res, next) => {
+  console.log("Incoming Request Body:", req.body); // Log the request body
   const { error } = reservationSchema.validate(req.body, { abortEarly: false });
   if (error) {
+    console.error("Validation Errors:", error.details); // Log validation errors
     return res.status(400).json({
       errors: error.details.map((err) => ({
         message: err.message,
-        field: err.context.label,
+        field: err.context.key,
       })),
     });
   }
