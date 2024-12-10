@@ -1,12 +1,22 @@
 const Club = require('../models/clubModel'); // Adjust the path as necessary
+const User = require('../models/User')
 
 exports.getClubMembers = async (req, res) => {
     try {
         const clubId = req.params.id; // Assuming the route is /:id/members
-        const club = await Club.findById(clubId).populate('members', 'name email profilePicture'); // Adjust fields as necessary
+        console.log(clubId + " THIS IS THE CLUB ID")
+
+        // Fetch the club and populate the 'members' field with specific fields
+        const club = await Club.findById(clubId)
+            .populate('members', 'name email profilePicture'); // Adjust fields as necessary
 
         if (!club) {
             return res.status(404).json({ message: 'Club not found' });
+        }
+
+        // Check if there are members
+        if (!club.members || club.members.length === 0) {
+            return res.status(200).json({ message: 'No members found for this club' });
         }
 
         res.status(200).json(club.members);
@@ -15,6 +25,7 @@ exports.getClubMembers = async (req, res) => {
         res.status(500).json({ message: 'Error fetching club members', error: error.message });
     }
 };
+
 
 // Fetch activities of a specific club
 exports.getClubActivities = async (req, res) => {

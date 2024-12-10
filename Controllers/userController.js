@@ -158,6 +158,7 @@ const fetchProfile = async (req, res) => {
         contactNumber: user.contactNumber,
         linkedIn: user.linkedIn,
         ID: user.ID,
+          _id: req.user._id
       },
     });
   } catch (err) {
