@@ -11,5 +11,9 @@ router.post(
   validateReservation,
   reservationController.createReservation
 );
-router.get("/available-timeslots",reservationController.getAvailableTimeSlots);
+router.get("/available-timeslots", reservationController.getAvailableTimeSlots);
+
+// Route to get reservations with filters
+router.get("/", reservationController.getReservationsWithFilters);
+
 module.exports = router;

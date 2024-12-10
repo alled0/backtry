@@ -146,19 +146,17 @@ exports.getAvailableTimeSlots = async (req, res) => {
 
 // Filter reservations
 exports.getReservationsWithFilters = async (req, res) => {
-  const { sport, date, type } = req.query;
+  const { sport } = req.query;
+  const filters = {};
+
+  if (sport) filters.sport = sport;
 
   try {
-    const filters = {};
-    if (sport) filters.sport = sport;
-    if (date) filters.date = new Date(date);
-    if (type) filters.type = type;
-
     const reservations = await Reservation.find(filters);
     res.status(200).json(reservations);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error while fetching reservations" });
+  } catch (error) {
+    console.error("Error fetching reservations:", error);
+    res.status(500).json({ error: "Failed to fetch reservations." });
   }
 };
 
