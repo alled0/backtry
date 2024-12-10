@@ -11,5 +11,5 @@ router.post(
   validateReservation,
   reservationController.createReservation
 );
-
+router.get("/available-timeslots",reservationController.getAvailableTimeSlots);
 module.exports = router;
