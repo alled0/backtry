@@ -62,9 +62,8 @@ router.post("/Log-In", async (req, res) => {
     const token = jwt.sign(
       { _id: user._id, role: user.role }, // Include user role in the token payload
       process.env.JWT_SECRET, 
-      { expiresIn: "1h" } // Set expiration time
+      { expiresIn: "3h" } // Set expiration time
     );
-
     // Return the token, role, and a success message
     res.status(200).send({
       data: {
@@ -91,5 +90,4 @@ router.get("/verify-token", authenticateToken, async (req, res) => {
     res.status(500).send({ message: "Server error." });
   }
 });
-
 module.exports = router;

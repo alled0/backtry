@@ -6,7 +6,7 @@ const eventSchema = new mongoose.Schema({
     description: { type: String, required: true }, // Description of the event
     location: { type: String }, // Event location (optional)
     date: { type: Date, required: true }, // Event date and time
-    // createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // User who created the event //May use Or not//
+    createdByClub: { type: mongoose.Schema.Types.ObjectId, ref: 'Club', required: true }, // User who created the event //May use Or not//
     //attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Users who are attending the event //May use Or not//
     createdAt: { type: Date, default: Date.now }, // Date the event was created
     updatedAt: { type: Date, default: Date.now }, // Last updated time for the event
