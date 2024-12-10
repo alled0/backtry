@@ -16,4 +16,6 @@ router.get("/available-timeslots", reservationController.getAvailableTimeSlots);
 // Route to get reservations with filters
 router.get("/", reservationController.getReservationsWithFilters);
 
+router.get("/:id", reservationController.getReservationById);
+
 module.exports = router;

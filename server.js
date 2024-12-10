@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connection = require("./config/db.js");
+const cron = require("node-cron");
+const Reservation = require("./models/Reservation"); // Update the path if necessary
 
 // Routes
 const authRoutes = require("./routes/authRoutes.js");
@@ -29,6 +31,7 @@ app.use("/api/reservationRoute", reservationRoute);
 app.use("/api/otpRoutes", otpRoutes);
 
 const PORT = process.env.PORT || 4000;
+
 
 try {
   connection();

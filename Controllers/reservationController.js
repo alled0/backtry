@@ -3,12 +3,9 @@ const generateCode = () => Math.floor(1000 + Math.random() * 9000).toString();
 
 exports.createReservation = async (req, res) => {
   const { sport, field, type, date, time } = req.body;
-  const userId = req.user._id; // Extracted from the token
-
-  console.log("Logged-in user ID:", userId);
+  const userId = req.user._id;
 
   try {
-    // Validate required fields
     if (!sport || !field || !type || !date || !time) {
       return res.status(400).json({
         error:
@@ -16,7 +13,6 @@ exports.createReservation = async (req, res) => {
       });
     }
 
-    // Check for duplicate reservations
     const existingReservation = await Reservation.findOne({
       sport,
       field,
@@ -30,12 +26,13 @@ exports.createReservation = async (req, res) => {
       });
     }
 
-    // Generate a unique code
     const code = Math.floor(1000 + Math.random() * 9000).toString();
 
-    // Create and save the reservation
+    // Calculate expiry timestamp (7 hours from now)
+    // const expiryTimestamp = new Date(Date.now() + 30 * 1000);
+
     const newReservation = new Reservation({
-      createdBy: userId, // Associate with logged-in user
+      createdBy: userId,
       sport,
       field,
       code,
@@ -46,7 +43,6 @@ exports.createReservation = async (req, res) => {
     });
 
     await newReservation.save();
-    console.log("Reservation created successfully:", newReservation);
     res.status(201).json(newReservation);
   } catch (err) {
     console.error("Error creating reservation:", err);
@@ -54,17 +50,43 @@ exports.createReservation = async (req, res) => {
   }
 };
 
-// Get a specific reservation by ID
+const sportCapacities = {
+  Football: 16,
+  Volleyball: 12,
+  Basketball: 10,
+  Tennis: 4,
+  Badminton: 4,
+  Squash: 2,
+};
+
 exports.getReservationById = async (req, res) => {
   const { id } = req.params;
+
   try {
     const reservation = await Reservation.findById(id);
     if (!reservation) {
       return res.status(404).json({ error: "Reservation not found" });
     }
-    res.status(200).json(reservation);
+
+    // Get the capacity for the sport
+    const sportCapacity = sportCapacities[reservation.sport] || 0;
+
+    // Calculate 50% of the capacity
+    const neededToConfirm = Math.ceil(sportCapacity / 2);
+
+    // Calculate how many more students are needed
+    const studentsNeeded = Math.max(
+      neededToConfirm - reservation.participants,
+      0
+    );
+
+    // Include studentsNeeded in the response
+    res.status(200).json({
+      ...reservation._doc, // Include all existing fields
+      studentsNeeded,
+    });
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching reservation:", err);
     res.status(500).json({ error: "Server error fetching reservation" });
   }
 };
