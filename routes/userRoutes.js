@@ -11,7 +11,8 @@ const {
     leaveEvent,
     getEnrolledClubs,
     getFollowedClubs,
-    getJoinedEvents
+    getJoinedEvents,
+    fetchProfileById
 } = require("../Controllers/userController");
 const authenticateToken = require("../middleware/authenticateToken");
 const authorizeRoles = require("../middleware/authorizeRoles");
@@ -26,6 +27,8 @@ router.put("/profile", authenticateToken, updateProfile);
 
 // Fetch Profile route
 router.get("/profile", authenticateToken, fetchProfile);
+
+router.get("/profile/:id",fetchProfileById);
 
 // Admin-only route
 router.get("/admin-only", authenticateToken, authorizeRoles("admin"), adminRoute);
