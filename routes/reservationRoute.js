@@ -12,7 +12,7 @@ router.post(
   reservationController.createReservation
 );
 router.get("/available-timeslots", reservationController.getAvailableTimeSlots);
-
+router.post("/:id/join",reservationController.joinReservation);
 // Route to get reservations with filters
 router.get("/", reservationController.getReservationsWithFilters);
 
