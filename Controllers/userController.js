@@ -370,26 +370,29 @@ const getJoinedEvents = async (req, res) => {
   }
 };
 const getUserWithReservations = async (req, res) => {
+
+  const userId = req.user._id;
   try {
-    const userId = req.user._id; // Extract userId from params or token
+    // Extract user ID from `req.user` (assumes user is authenticated)
+
     if (!userId) {
       return res.status(400).json({ error: "User ID is required." });
     }
 
-    console.log("Fetching user reservations for:", userId);
 
+    // Fetch the user with populated reservations
     const user = await User.findById(userId)
-      .populate("createdReservations")
-      .populate("joinedReservations");
+        .populate("createdReservations")
+        .populate("joinedReservations");
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "User not found." });
     }
 
-    console.log("User Data:", user);
 
+    // Respond with the user's reservation data
     res.status(200).json({
-      message: "User fetched successfully",
+      message: "User reservations fetched successfully.",
       data: {
         createdReservations: user.createdReservations,
         joinedReservations: user.joinedReservations,
@@ -397,9 +400,10 @@ const getUserWithReservations = async (req, res) => {
     });
   } catch (err) {
     console.error("Error fetching user reservations:", err);
-    res.status(500).json({ error: "Failed to fetch user details." });
+    res.status(500).json({ error: "Failed to fetch user reservations." });
   }
 };
+
 
 module.exports = {
   signUp,

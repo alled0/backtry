@@ -13,7 +13,7 @@ const {
   getFollowedClubs,
   getJoinedEvents,
   fetchProfilebyId,
-  getUserWithReservations,
+getUserWithReservations,
 } = require("../Controllers/userController");
 const authenticateToken = require("../middleware/authenticateToken");
 const authorizeRoles = require("../middleware/authorizeRoles");
@@ -23,6 +23,7 @@ const router = express.Router();
 // Sign-Up route
 router.post("/sign-Up", signUp);
 
+router.get("/profile/reservations", authenticateToken, getUserWithReservations);
 // Update Profile route
 router.put("/profile", authenticateToken, updateProfile);
 
@@ -64,7 +65,6 @@ router.get("/followed-clubs", authenticateToken, getFollowedClubs);
 // Get Joined Events
 router.get("/joined-events", authenticateToken, getJoinedEvents);
 
-router.get("/profile/reservations", authenticateToken, getUserWithReservations);
 
 
 module.exports = router;

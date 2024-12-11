@@ -196,3 +196,36 @@ exports.addMemberToClub = async (req, res) => {
         res.status(500).json({ message: 'Error adding member', error: error.message });
     }
 };
+
+exports.addClubActivites = async () => {
+    try {
+        const { clubId, memberId } = req.body; // Get clubId and memberId from the request body
+
+        // Find the club by ID
+        const club = await Club.findById(clubId);
+        if (!club) {
+            return res.status(404).json({ message: 'Club not found' });
+        }
+
+        // Check if the member already exists in the club
+        if (club.members.includes(memberId)) {
+            return res.status(400).json({ message: 'Member is already in the club' });
+        }
+
+        // Add member to the club's members array
+        club.members.push(memberId);
+
+        // Update the updatedAt field
+        club.updatedAt = Date.now();
+
+        // Save the club with the new member
+        await club.save();
+
+        // Return the updated club information
+        const updatedClub = await Club.findById(clubId).populate('members', 'name email profilePicture');
+        res.status(200).json(updatedClub.members);
+    } catch (error) {
+        console.error('Error adding member:', error);
+        res.status(500).json({ message: 'Error adding member', error: error.message });
+    }
+}
