@@ -29,7 +29,7 @@ router.put("/profile", authenticateToken, updateProfile);
 
 // Fetch Profile route
 router.get("/profile", authenticateToken, fetchProfile);
-
+router.post("/leave-event",authenticateToken,leaveEvent)
 router.get("/profile/:id", fetchProfilebyId); //fetchProfilebyId
 
 // Admin-only route
