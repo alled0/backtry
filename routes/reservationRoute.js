@@ -47,5 +47,6 @@ router.get("/", reservationController.getReservationsWithFilters);
 // Get reservation by ID
 router.get("/:id", reservationController.getReservationById);
 
+router.get("/code/:code", reservationController.getReservationByCode);
 
 module.exports = router;

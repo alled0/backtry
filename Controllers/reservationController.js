@@ -185,9 +185,6 @@ exports.getReservationsWithFilters = async (req, res) => {
 // Join a reservation
 exports.joinReservation = async (req, res) => {
   const { id } = req.params;
-  // Assume user email or ID comes from authenticated token or from req.body
-  const { email } = req.body;
-
   try {
     const reservation = await Reservation.findById(id);
     if (!reservation)
@@ -195,6 +192,12 @@ exports.joinReservation = async (req, res) => {
 
     // Increase participants by 1 (or handle max)
     // If you want to ensure no duplicates, you'd check if user already joined
+    const maxCapacity = sportCapacities[reservation.sport];
+    if (reservation.participants >= maxCapacity) {
+      return res
+        .status(400)
+        .json({ error: "Reservation has reached its capacity" });
+    }
     reservation.participants += 1;
     await reservation.save();
     res.status(200).json({ message: "Joined successfully", reservation });
@@ -228,5 +231,24 @@ exports.leaveReservation = async (req, res) => {
   } catch (err) {
     console.error("Error leaving reservation:", err);
     res.status(500).json({ error: "Server error while leaving reservation" });
+  }
+};
+exports.getReservationByCode = async (req, res) => {
+  const { code } = req.params; // Extract the reservation code from the route params
+
+  try {
+    // Find the reservation with the given code
+    const reservation = await Reservation.findOne({ code });
+    console.log(reservation);
+    if (!reservation) {
+      // If no reservation is found, return a 404 response
+      return res.status(404).json({ message: "Reservation not found" });
+    }
+
+    // Return the reservation details
+    res.status(200).json(reservation);
+  } catch (error) {
+    console.error("Error fetching reservation by code:", error);
+    res.status(500).json({ message: "Server error fetching reservation" });
   }
 };

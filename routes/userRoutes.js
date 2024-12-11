@@ -66,4 +66,5 @@ router.get("/joined-events", authenticateToken, getJoinedEvents);
 
 router.get("/profile/reservations", authenticateToken, getUserWithReservations);
 
+
 module.exports = router;
