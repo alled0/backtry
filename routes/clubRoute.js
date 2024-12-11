@@ -1,5 +1,5 @@
 const express = require('express');
-const clubController = require('../controllers/clubController'); // Adjust the path as necessary
+const clubController = require('../Controllers/clubController'); // Adjust the path as necessary
 const authenticateToken = require("../middleware/authenticateToken");
 const authorizeRoles = require('../middleware/authorizeRoles');
 const router = express.Router();
