@@ -1,20 +1,21 @@
 const express = require("express");
 const {
-    signUp,
-    updateProfile,
-    fetchProfile,
-    adminRoute,
-    clubRoute,
-    followClub,
-    unfollowClub,
-    joinEvent,
-    leaveEvent,
-    getEnrolledClubs,
-    getFollowedClubs,
-    getJoinedEvents
+  signUp,
+  updateProfile,
+  fetchProfile,
+  adminRoute,
+  clubRoute,
+  followClub,
+  unfollowClub,
+  joinEvent,
+  leaveEvent,
+  getEnrolledClubs,
+  getFollowedClubs,
+  getJoinedEvents,
 } = require("../Controllers/userController");
 const authenticateToken = require("../middleware/authenticateToken");
 const authorizeRoles = require("../middleware/authorizeRoles");
+const { getUserWithReservations } = require("../Controllers/userController");
 
 const router = express.Router();
 
@@ -28,10 +29,20 @@ router.put("/profile", authenticateToken, updateProfile);
 router.get("/profile", authenticateToken, fetchProfile);
 
 // Admin-only route
-router.get("/admin-only", authenticateToken, authorizeRoles("admin"), adminRoute);
+router.get(
+  "/admin-only",
+  authenticateToken,
+  authorizeRoles("admin"),
+  adminRoute
+);
 
 // Club-only route
-router.get("/club-only", authenticateToken, authorizeRoles("clubAccount"), clubRoute);
+router.get(
+  "/club-only",
+  authenticateToken,
+  authorizeRoles("clubAccount"),
+  clubRoute
+);
 
 // Follow/Unfollow Club
 router.post("/follow-club", authenticateToken, followClub);
@@ -49,5 +60,6 @@ router.get("/followed-clubs", authenticateToken, getFollowedClubs);
 
 // Get Joined Events
 router.get("/joined-events", authenticateToken, getJoinedEvents);
+
 
 module.exports = router;

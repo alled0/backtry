@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
-const {Mongoose, mongo} = require("mongoose");
+const { Mongoose, mongo } = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ["normal", "admin", "clubAccount"],
-    default: "normal"
+    default: "normal",
   },
   otpVerified: {
     type: Boolean,
@@ -26,10 +26,13 @@ const userSchema = new mongoose.Schema({
   ID: { type: String, default: "443" },
   followedClubs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Club" }],
   enrolledClubs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Club" }],
-  joinedEvents: [{type: mongoose.Schema.Types.ObjectId, ref: "Event"}],
-  joinedReservations: [{type: mongoose.Schema.Types.ObjectId, ref: "Reservation"}],
-  createdReservation:{ type: Boolean, default: false}
-  
+  joinedEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
+  joinedReservations: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Reservation" },
+  ],
+  createdReservations: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Reservation" },
+  ], // Array to track multiple created reservations
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -44,7 +47,10 @@ const validate = (data) => {
     name: Joi.string().required().label("Name"),
     email: Joi.string().email().required().label("Email"),
     password: passwordComplexity().required().label("Password"),
-    role: Joi.string().valid("normal", "admin", "clubAccount").required().label("Role"),
+    role: Joi.string()
+      .valid("normal", "admin", "clubAccount")
+      .required()
+      .label("Role"),
   });
   return schema.validate(data);
 };

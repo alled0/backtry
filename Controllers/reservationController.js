@@ -203,3 +203,30 @@ exports.joinReservation = async (req, res) => {
     res.status(500).json({ error: "Server error joining reservation" });
   }
 };
+
+exports.leaveReservation = async (req, res) => {
+  const { id } = req.params;
+  const { email } = req.body;
+
+  try {
+    const reservation = await Reservation.findById(id);
+    if (!reservation)
+      return res.status(404).json({ error: "Reservation not found" });
+
+    // Update participants count (e.g., decrease by 1)
+    if (reservation.participants > 0) {
+      reservation.participants -= 1;
+      await reservation.save();
+      return res
+        .status(200)
+        .json({ message: "Left the reservation successfully", reservation });
+    } else {
+      return res
+        .status(400)
+        .json({ error: "No participants to leave the reservation." });
+    }
+  } catch (err) {
+    console.error("Error leaving reservation:", err);
+    res.status(500).json({ error: "Server error while leaving reservation" });
+  }
+};
