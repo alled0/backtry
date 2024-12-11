@@ -4,10 +4,7 @@ const reservationController = require("../Controllers/reservationController");
 const { validateReservation } = require("../validationSchemas");
 const authenticateToken = require("../middleware/authenticateToken");
 
-console.log("reservationController:", reservationController);
-console.log("createReservation:", reservationController.createReservation);
-console.log("authenticateToken:", authenticateToken);
-console.log("validateReservation:", validateReservation);
+
 
 // Route to create a reservation
 router.post(
