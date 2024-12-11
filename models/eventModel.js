@@ -5,6 +5,7 @@ const eventSchema = new mongoose.Schema({
     subTitle: { type: String, required: true },
     description: { type: String, required: true }, // Description of the event
     location: { type: String }, // Event location (optional)
+    img: { type: String },
     date: { type: Date, required: true }, // Event date and time
     createdByClub: { type: mongoose.Schema.Types.ObjectId, ref: 'Club', required: true }, // User who created the event //May use Or not//
     //attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Users who are attending the event //May use Or not//
