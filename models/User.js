@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
   interests: { type: String, default: "" },
   contactNumber: { type: String, default: "" },
   linkedIn: { type: String, default: "" },
-  ID: { type: String, default: "443" },
   followedClubs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Club" }],
   enrolledClubs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Club" }],
   joinedEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],

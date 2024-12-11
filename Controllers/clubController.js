@@ -53,7 +53,7 @@ exports.createClub = async (req, res) => {
         }
 
         // Destructure necessary fields from the request body
-        const { name} = req.body;
+        const { name, clubAccount} = req.body;
         console.log(name );
         // Validate required fields
         if (!name) {
@@ -70,7 +70,9 @@ exports.createClub = async (req, res) => {
             createdBy: req.user._id, // Set the creator as the authenticated user
             // Optionally, add the creator to the members list
             members: [req.user._id],
+
             // Initialize other fields as needed
+            clubAccount: clubAccount
         });
 
         // Save the club to the database

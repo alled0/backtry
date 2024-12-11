@@ -8,6 +8,8 @@ const signUp = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
+
+    let verified = false;
     // Validate the user data
     const { error } = validate(req.body);
     if (error)
@@ -33,27 +35,33 @@ const signUp = async (req, res) => {
     // Hash password and create user
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
+    if (role === "clubAccount") {
+      verified = true;
+    }
     const user = new User({
       name,
       email,
       password: hashedPassword,
       role,
+      otpVerified: verified
     });
 
     await user.save();
 
+
     // Now, no OTP is generated here. Just inform user to request OTP separately.
     res.status(201).send({
       message:
-        "User registered successfully! Please request an OTP to verify your email.",
+        "User registered successfully! Please request an OTP to verify your email.",Account: user
     });
   } catch (error) {
     console.error("Sign-up error:", error);
     res.status(500).send({ message: "Server error" });
   }
 };
-
+const OTPUser = (user) => {
+  user.otpVerified = true;
+}
 // Update Profile controller
 const updateProfile = async (req, res) => {
   const userId = req.user._id; // Extract user ID from the JWT token
@@ -420,4 +428,5 @@ module.exports = {
   getFollowedClubs,
   fetchProfilebyId,
   getUserWithReservations,
+  OTPUser
 };
