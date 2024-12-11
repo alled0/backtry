@@ -9,7 +9,7 @@ const Reservation = require("./models/Reservation"); // Update the path if neces
 
 // Routes
 const authRoutes = require("./routes/authRoutes.js");
-const userRoutes = require("./routes/userRoutes.js"); 
+const userRoutes = require("./routes/userRoutes.js");
 const reservationRoute = require("./routes/reservationRoute.js");
 const eventRoutes = require("./routes/eventRoute.js");
 const clubRoutes = require("./routes/clubRoute.js");
@@ -31,7 +31,6 @@ app.use("/api/reservationRoute", reservationRoute);
 app.use("/api/otpRoutes", otpRoutes);
 
 const PORT = process.env.PORT || 4000;
-
 
 try {
   connection();
