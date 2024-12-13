@@ -30,6 +30,16 @@ app.use("/api/clubRoute", clubRoutes);
 app.use("/api/reservationRoute", reservationRoute);
 app.use("/api/otpRoutes", otpRoutes);
 
+const path = require("path");
+
+// Serve React's build directory
+app.use(express.static(path.join(__dirname, "build")));
+
+// Handle React routing for all unknown routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
 const PORT = process.env.PORT || 4000;
 
 try {
