@@ -18,6 +18,7 @@ const otpRoutes = require("./routes/otpRoutes.js");
 dotenv.config(); // Load environment variables
 
 const app = express();
+app.option('*',cors());
 app.use(cors({
   origin: "https://kfupm-hup.onrender.com", // Allow requests from this origin
   methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
