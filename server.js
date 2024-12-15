@@ -18,8 +18,12 @@ const otpRoutes = require("./routes/otpRoutes.js");
 dotenv.config(); // Load environment variables
 
 const app = express();
+app.use(cors({
+  origin: "https://kfupm-hup.onrender.com", // Allow requests from this origin
+  methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+  credentials: true // If you're using cookies or authentication headers
+}));
 
-app.use(cors());
 app.use(express.json()); // Middleware to parse JSON requests
 
 // Use the routes
@@ -32,13 +36,6 @@ app.use("/api/otpRoutes", otpRoutes);
 
 const path = require("path");
 
-// Serve React's build directory
-app.use(express.static(path.join(__dirname, "build")));
-
-// Handle React routing for all unknown routes
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
 
 const PORT = process.env.PORT || 4000;
 
