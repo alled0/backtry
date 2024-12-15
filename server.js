@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const connection = require("./config/db.js");
 const cron = require("node-cron");
 const Reservation = require("./models/Reservation"); // Update the path if necessary
+const app = express();
 
 // Routes
 const authRoutes = require("./routes/authRoutes.js");
@@ -17,10 +18,7 @@ const otpRoutes = require("./routes/otpRoutes.js");
 
 dotenv.config(); // Load environment variables
 
-const app = express();
-const cors = require('cors');
-const express = require('express');
-const app = express();
+
 
 // Allow requests from the frontend domain
 const allowedOrigins = ['https://kfupm-hup.onrender.com'];
