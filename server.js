@@ -22,6 +22,8 @@ app.option('*',cors());
 app.use(cors({
   origin: "https://kfupm-hup.onrender.com", // Allow requests from this origin
   methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+    allowedHeaders: 'Content-Type, Authorization', // Allow these headers
+
   credentials: true // If you're using cookies or authentication headers
 }));
 
