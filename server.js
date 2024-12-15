@@ -18,11 +18,25 @@ const otpRoutes = require("./routes/otpRoutes.js");
 dotenv.config(); // Load environment variables
 
 const app = express();
+const cors = require('cors');
+const express = require('express');
+const app = express();
+
+// Allow requests from the frontend domain
+const allowedOrigins = ['https://kfupm-hup.onrender.com'];
+
 app.use(cors({
-  origin: "https://kfupm-hup.onrender.com", // Allow requests from this origin
-  methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
-  credentials: true // If you're using cookies or authentication headers
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
 }));
+
+// Your routes and other configurations...
+
 
 app.use(express.json()); // Middleware to parse JSON requests
 
